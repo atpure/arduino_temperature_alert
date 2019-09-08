@@ -16,7 +16,7 @@ int led_interval = 5; // x 200ms
 int led_interval_count = led_interval;
 double alert_temperature = 30;
 double tempA, tempO;
-boolean alert_on = false;
+boolean high_temp = false;
 boolean buzz_on = false;
 boolean led_on = false;
 int address = 0;
@@ -112,12 +112,11 @@ void loop() {
   
   if (tempO > alert_temperature) {
     digitalWrite(LED_BUILTIN, LOW);
+    high_temp = true;
 
     if (--pulse_check_count > 0) { // An alarm is triggered when high temperature is maintained for more than 'pulse_check' seconds.
       ;
-    } else {
-      alert_on = true;
-      
+    } else {    
       if (buzz_on) {
           digitalWrite(BUZZER, LOW);
           buzz_on = false;
@@ -131,10 +130,10 @@ void loop() {
     led_on = true;
     delay(200);
   } else {
-    if (alert_on) {
+    if (high_temp) {
       digitalWrite(LED_BUILTIN, HIGH);
       led_on = false;
-      alert_on = false;
+      high_temp = false;
     }
     if (--led_interval_count > 0) {
       ;
