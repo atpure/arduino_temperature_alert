@@ -16,7 +16,7 @@ int led_interval = 5; // x 200ms
 int led_interval_count = led_interval;
 double alert_temperature = 30;
 double recovery_threthold = 1;
-double tempA, tempO;
+double tempA, tempO, tempO_max;
 boolean high_temp = false;
 boolean alert_on = false;
 boolean buzz_on = false;
@@ -60,6 +60,10 @@ void loop() {
   tempA = mlx.readAmbientTempC();
   tempO = mlx.readObjectTempC();
 
+  if (tempO > tempO_max) {
+    tempO_max = tempO;
+  }
+
   WiFiClient client = server.available();
 
   if (client) {
@@ -91,6 +95,9 @@ void loop() {
           client.println(F(" <input type=\"button\" name=\"button\" value=\"SET\" onclick=\"submit();\">"));
           client.println(F("  </form>"));
           client.println("(1 ~ 300)");
+          client.println("<br><br>");
+          client.print("Max Temperature: ");
+          client.println(tempO_max);
           client.println("<br>");
           client.println("<h1>Temperature</h1>");
           client.print("<h2>");
