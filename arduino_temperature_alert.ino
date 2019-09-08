@@ -10,13 +10,15 @@
 
 int print_interval = 15; // x 200ms
 int print_interval_count = print_interval;
-int pulse_check = 25; // x 200ms
-int pulse_check_count = pulse_check;
+int high_temp_check = 5; // x 200ms
+int high_temp_check_count = high_temp_check;
 int led_interval = 5; // x 200ms
 int led_interval_count = led_interval;
 double alert_temperature = 30;
+double recovery_threthold = 1;
 double tempA, tempO;
 boolean high_temp = false;
+boolean alert_on = false;
 boolean buzz_on = false;
 boolean led_on = false;
 int address = 0;
@@ -72,8 +74,7 @@ void loop() {
       Serial.println(newVal);
       SaveValue(newVal.toInt());
     }
-
-
+    
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
 //          client.println("Connection: close");  // the connection will be closed after completion of the response
@@ -110,13 +111,14 @@ void loop() {
     Serial.print("Object Temperature = ");Serial.println(tempO);
   }
   
-  if (tempO > alert_temperature) {
+  if (tempO > alert_temperature || (alert_on && (tempO > alert_temperature - recovery_threthold))) {
     digitalWrite(LED_BUILTIN, LOW);
     high_temp = true;
 
-    if (--pulse_check_count > 0) { // An alarm is triggered when high temperature is maintained for more than 'pulse_check' seconds.
+    if (--high_temp_check_count > 0) { // An alarm is triggered when high temperature is maintained for more than 'high_temp_check' seconds.
       ;
-    } else {    
+    } else {
+      alert_on = true;
       if (buzz_on) {
           digitalWrite(BUZZER, LOW);
           buzz_on = false;
@@ -134,6 +136,7 @@ void loop() {
       digitalWrite(LED_BUILTIN, HIGH);
       led_on = false;
       high_temp = false;
+      alert_on = false;
     }
     if (--led_interval_count > 0) {
       ;
@@ -149,7 +152,7 @@ void loop() {
       }
     }
  
-    pulse_check_count = pulse_check;
+    high_temp_check_count = high_temp_check;
     digitalWrite(BUZZER, LOW);
     buzz_on = false;
     delay(200);
@@ -160,8 +163,10 @@ void SaveValue(int temp)
 {
   if (temp > 0 && temp <= 300) {
     Serial.println("New Value Saved");
-    alert_temperature = temp;
-    EEPROM.write(address, temp);
-    EEPROM.commit();
+    if (alert_temperature != temp) {
+      alert_temperature = temp;
+      EEPROM.write(address, temp);
+      EEPROM.commit();
+    }
   }
 }
