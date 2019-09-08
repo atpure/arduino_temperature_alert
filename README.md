@@ -9,7 +9,7 @@ I use it for temperature monitoring when charging lipo batteries.
 
 ## youtube
 
-[![youtube](https://img.youtube.com/vi/f1dtH6AfRHU/0.jpg =600x)](https://www.youtube.com/watch?v=f1dtH6AfRHU)
+[![youtube](https://img.youtube.com/vi/f1dtH6AfRHU/0.jpg)](https://www.youtube.com/watch?v=f1dtH6AfRHU)
 
 ## Circuit
 
