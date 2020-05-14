@@ -23,3 +23,7 @@ I use it for temperature monitoring when charging lipo batteries.
 ## Additional Boadrds Manager URLs
 
 http://arduino.esp8266.com/stable/package_esp8266com_index.json
+
+## Library
+
+Adafruit_MLX90614_Library
