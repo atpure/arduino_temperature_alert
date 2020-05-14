@@ -18,3 +18,8 @@ I use it for temperature monitoring when charging lipo batteries.
 ## Alert Temperature Setting
 
 ![setting](image/setting.jpg)
+
+
+## Additional Boadrds Manager URLs
+
+http://arduino.esp8266.com/stable/package_esp8266com_index.json
