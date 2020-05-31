@@ -179,7 +179,7 @@ void loop() {
     delay(200);
   }
 
-  // OLDE Display
+  // OLED Display
   display.clearDisplay();
 
   display.setTextSize(1);
